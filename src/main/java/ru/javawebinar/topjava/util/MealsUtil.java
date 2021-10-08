@@ -11,23 +11,31 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MealsUtil {
-    public static final int LIMIT = 2000;
 
     public static void main(String[] args) {
-        MealList.getMeals().forEach(System.out::println);
+        MealList.get().forEach(System.out::println);
     }
 
-    public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime) {
-        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
-                .collect(
-                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
-                );
+    public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int dayLimit) {
+        Map<LocalDate, Integer> caloriesSumByDate = groupCaloriesByDay(meals);
 
         return meals.stream()
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
-                .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > LIMIT))
+                .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > dayLimit))
                 .collect(Collectors.toList());
+    }
+
+    public static List<MealTo> map(List<Meal> meals, int dayLimit) {
+        Map<LocalDate, Integer> caloriesSumByDate = groupCaloriesByDay(meals);
+
+        return meals.stream()
+                .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > dayLimit))
+                .collect(Collectors.toList());
+    }
+
+    private static Map<LocalDate, Integer> groupCaloriesByDay(List<Meal> meals) {
+        return meals.stream()
+                .collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
     }
 
     private static MealTo createTo(Meal meal, boolean excess) {

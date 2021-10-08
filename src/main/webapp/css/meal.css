@@ -1,0 +1,33 @@
+table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid purple;
+}
+th, td {
+    padding: 20px;
+}
+th {
+    letter-spacing: 2px;
+}
+
+td {
+    letter-spacing: 1px;
+}
+
+tbody td {
+    text-align: center;
+}
+
+tfoot th {
+    text-align: right;
+}
+
+.exceeded {
+    background-color: burlywood;
+    color: darkred;
+}
+.not-exceeded {
+    background-color: palegreen;
+    color: forestgreen;
+}
