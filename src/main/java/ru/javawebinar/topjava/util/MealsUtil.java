@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MealsUtil {
 
@@ -17,28 +18,24 @@ public class MealsUtil {
     }
 
     public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int dayLimit) {
-        Map<LocalDate, Integer> caloriesSumByDate = groupCaloriesByDay(meals);
-//  TODO use strategy here. Something about interfaces
-        return meals.stream()
+        return mapMeals(meals.stream(), meals, dayLimit)
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
-                .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > dayLimit))
                 .collect(Collectors.toList());
     }
 
-    public static List<MealTo> map(List<Meal> meals, int dayLimit) {
-        Map<LocalDate, Integer> caloriesSumByDate = groupCaloriesByDay(meals);
-
-        return meals.stream()
-                .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > dayLimit))
+    public static List<MealTo> getMappedMealList(List<Meal> meals, int dayLimit) {
+        return mapMeals(meals.stream(), meals, dayLimit)
                 .collect(Collectors.toList());
     }
 
-    private static Map<LocalDate, Integer> groupCaloriesByDay(List<Meal> meals) {
-        return meals.stream()
-                .collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
-    }
-
-    private static MealTo createTo(Meal meal, boolean excess) {
+    private static MealTo createMealTo(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
+
+    private static Stream<MealTo> mapMeals(Stream<Meal> stream, List<Meal> meals, int dayLimit) {
+        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
+                .collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
+        return stream.map(meal -> createMealTo(meal, caloriesSumByDate.get(meal.getDate()) > dayLimit));
+    }
+
 }

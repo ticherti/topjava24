@@ -10,14 +10,14 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.MealsUtil.map;
+import static ru.javawebinar.topjava.util.MealsUtil.getMappedMealList;
 
 public class MealList {
     public static final int LIMIT = 2000;
     private static final AbstractMealStorage storage = createStorage();
 
     public static List<MealTo> get() {
-        return map(storage.getAll(), LIMIT);
+        return getMappedMealList(storage.getAll(), LIMIT);
     }
 
     public static AbstractMealStorage getStorage() {
