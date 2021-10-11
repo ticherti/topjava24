@@ -22,13 +22,13 @@
                 <c:out value="${meal.isExcess() ? 'exceeded' : 'not-exceeded'}"/>
         >
             <td>
-                <p><c:out value="${DateUtil.format(meal.getDateTime())}"/></p>
+                <p>${DateUtil.format(meal.getDateTime())}</p>
             </td>
             <td>
-                <p><c:out value="${meal.getDescription()}"/></p>
+                <p>${meal.getDescription()}</p>
             </td>
             <td>
-                <p><c:out value="${meal.getCalories()}"/></p>
+                <p>${meal.getCalories()}</p>
             </td>
             <td><a href="mealController?action=edit&id=<c:out value="${meal.getId()}"/>">Update</a></td>
             <td><a href="mealController?action=delete&id=<c:out value="${meal.getId()}"/>">Delete</a></td>

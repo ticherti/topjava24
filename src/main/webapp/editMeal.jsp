@@ -10,23 +10,19 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <form method="POST" action='mealController' name="frmAddMeal">
-    <input type="hidden" name="mealId" value="<c:out value="${meal.getId()}"/>">
+    <input type="hidden" name="id" value="<c:out value="${meal.getId()}"/>">
     <br/>
     Description : <input
         type="text"
         name="description"
-        value="
-<c:out value="${meal.getDescription()}" />
-"/>
+        value="${meal.getDescription()}"/>
     <br/>
     Calories : <input
         type="text" name="calories"
-        value="
-            <c:out value="${meal.getCalories()}" />
-"/>
+        value="${meal.getCalories()}"/>
     <br/>
     Date :
-    <input type="datetime-local" name="dateTime" value="<c:out value="${meal.getDateTime()}"/>">
+    <input type="datetime-local" name="dateTime" value="${meal.getDateTime()}">
     <br/>
     <input
             type="submit" value="Submit"/>

@@ -4,23 +4,29 @@ import ru.javawebinar.topjava.exception.StorageException;
 import ru.javawebinar.topjava.model.Meal;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class MapStorage implements AbstractStorage {
+public class MapMealStorage implements AbstractMealStorage {
     private final Map<Long, Meal> storage;
 
-    public MapStorage() {
-        this.storage = new HashMap<>();
+    private static volatile long idCount = 0;
+
+    public MapMealStorage() {
+        this.storage = new ConcurrentHashMap<>();
     }
 
     @Override
     public void add(Meal meal) {
-        if (meal == null){
+        if (meal == null) {
             return;
         }
-        storage.put(meal.getId(), meal);
+        synchronized (this) {
+            long id = ++idCount;
+            meal.setId(id);
+            storage.put(id, meal);
+        }
     }
 
     @Override
@@ -32,13 +38,18 @@ public class MapStorage implements AbstractStorage {
     @Override
     public void update(Meal meal) {
         long id = meal.getId();
+//        TODO check if better change it for a specific concurrent map method
         checkExistence(id);
-        storage.put(id, meal);
+        synchronized (this) {
+            storage.put(id, meal);
+        }
     }
 
     @Override
     public void delete(long id) {
-        storage.remove(id);
+        synchronized (this) {
+            storage.remove(id);
+        }
     }
 
     @Override
