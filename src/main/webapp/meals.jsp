@@ -1,3 +1,4 @@
+<%@ page import="ru.javawebinar.topjava.util.DateUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
@@ -11,23 +12,17 @@
 <h2>Meals </h2>
 <table>
     <tr>
-        <th>День</th>
         <th>Время</th>
         <th>Описание</th>
         <th>Калории</th>
         <th colspan=2></th>
     </tr>
-
     <c:forEach var="meal" items="${list}">
         <tr class=
                 <c:out value="${meal.isExcess() ? 'exceeded' : 'not-exceeded'}"/>
         >
             <td>
-                    <%--                TODO change date and time for formatted dateTime--%>
-                <p><c:out value="${meal.getDate()}"/></p>
-            </td>
-            <td>
-                <p><c:out value="${meal.getTime()}"/></p>
+                <p><c:out value="${DateUtil.format(meal.getDateTime())}"/></p>
             </td>
             <td>
                 <p><c:out value="${meal.getDescription()}"/></p>
@@ -40,7 +35,7 @@
         </tr>
     </c:forEach>
 </table>
-<%--TODO for some reasons there is no insert in the example case. BUT. There is strange else{} where the action is add--%>
+
 <p><a href="mealController?action=insert">Add meal</a></p>
 </body>
 </html>
