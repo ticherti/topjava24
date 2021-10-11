@@ -13,19 +13,28 @@ public class MealTo {
 
     private final boolean excess;
 
-    public MealTo(LocalDateTime dateTime, String description, int calories, boolean excess) {
+    private volatile long id;
+
+    public MealTo(long id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+        this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.excess = excess;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }
+
     public LocalDate getDate() {
         return dateTime.toLocalDate();
     }
+
     public LocalTime getTime() {
         return dateTime.toLocalTime();
     }
