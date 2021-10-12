@@ -9,7 +9,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <hr>
-<form method="POST" action='mealController' name="frmAddMeal">
+<form method="POST" action='meals' name="frmAddMeal">
     <input type="hidden" name="id" value="${meal.id}">
     <br/>
     Description : <input
@@ -18,14 +18,13 @@
         value="${meal.description}"/>
     <br/>
     Calories : <input
-        type="text" name="calories"
+        type="number" name="calories"
         value="${meal.calories}"/>
     <br/>
     Date :
     <input type="datetime-local" name="dateTime" value="${meal.dateTime}">
     <br/>
-    <input
-            type="submit" value="Submit"/>
+    <input type="submit" value="Submit"/>
 </form>
 </body>
 </html>

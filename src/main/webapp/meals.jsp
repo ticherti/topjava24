@@ -31,12 +31,12 @@
             <td>
                 <p>${meal.calories}</p>
             </td>
-            <td><a href="mealController?action=edit&id=${meal.id}">Update</a></td>
-            <td><a href="mealController?action=delete&id=${meal.id}">Delete</a></td>
+            <td><a href="meals?action=edit&id=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
 
-<p><a href="mealController?action=insert">Add meal</a></p>
+<p><a href="meals?action=insert">Add meal</a></p>
 </body>
 </html>
