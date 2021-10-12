@@ -8,41 +8,50 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MapMealStorage implements AbstractMealStorage {
+public class MapStorage implements MealStorage {
     private final Map<Long, Meal> storage;
 
     private static volatile long idCount = 0;
 
-    public MapMealStorage() {
+    public MapStorage() {
         this.storage = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void add(Meal meal) {
-        if (meal == null) {
-            return;
+    public Meal add(Meal meal) {
+//            TODO ASK should I check for existence first, and what should I return if it exists like in the if() here
+//         Если meal == null, это ошибка, не надо ее игнорировать. Пусть лучше вылетит исключение.
+//         - which one exactly. Should I put some special exception?
+        if (isExist(meal.getId())){
+            return null;
         }
         synchronized (this) {
             long id = ++idCount;
             meal.setId(id);
             storage.put(id, meal);
         }
+        return meal;
     }
 
     @Override
     public Meal get(long id) {
-        checkExistence(id);
+        if (!isExist(id)) {
+            return null;
+        }
         return storage.get(id);
     }
 
     @Override
-    public void update(Meal meal) {
+    public Meal update(Meal meal) {
         long id = meal.getId();
+        if (!isExist(id)) {
+            return null;
+        }
 //        TODO check if better change it for a specific concurrent map method
-        checkExistence(id);
         synchronized (this) {
             storage.put(id, meal);
         }
+        return meal;
     }
 
     @Override
@@ -57,9 +66,10 @@ public class MapMealStorage implements AbstractMealStorage {
         return new ArrayList<>(storage.values());
     }
 
-    private void checkExistence(long id) {
-        if (!storage.containsKey(id)) {
-            throw new StorageException("No such meal");
+    private boolean isExist(long id) {
+        if(storage.containsKey(id)){
+            return true;
         }
+        else return false;
     }
 }

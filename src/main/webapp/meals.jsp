@@ -1,6 +1,7 @@
 <%@ page import="ru.javawebinar.topjava.util.DateUtil" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="list" scope="request" type="java.util.List<ru.javawebinar.topjava.model.MealTo>"/>
 <html>
 <head>
     <title>Meals</title>
@@ -19,19 +20,19 @@
     </tr>
     <c:forEach var="meal" items="${list}">
         <tr class=
-                <c:out value="${meal.isExcess() ? 'exceeded' : 'not-exceeded'}"/>
+                <c:out value="${meal.excess ? 'exceeded' : 'not-exceeded'}"/>
         >
             <td>
-                <p>${DateUtil.format(meal.getDateTime())}</p>
+                <p>${DateUtil.format(meal.dateTime)}</p>
             </td>
             <td>
-                <p>${meal.getDescription()}</p>
+                <p>${meal.description}</p>
             </td>
             <td>
-                <p>${meal.getCalories()}</p>
+                <p>${meal.calories}</p>
             </td>
-            <td><a href="mealController?action=edit&id=<c:out value="${meal.getId()}"/>">Update</a></td>
-            <td><a href="mealController?action=delete&id=<c:out value="${meal.getId()}"/>">Delete</a></td>
+            <td><a href="mealController?action=edit&id=${meal.id}">Update</a></td>
+            <td><a href="mealController?action=delete&id=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

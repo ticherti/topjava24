@@ -2,8 +2,8 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.storage.AbstractMealStorage;
-import ru.javawebinar.topjava.storage.MapMealStorage;
+import ru.javawebinar.topjava.storage.MealStorage;
+import ru.javawebinar.topjava.storage.MapStorage;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -14,17 +14,17 @@ import static ru.javawebinar.topjava.util.MealsUtil.getMappedMealList;
 
 public class MealList {
     public static final int LIMIT = 2000;
-    private static final AbstractMealStorage storage = createStorage();
+    private static final MealStorage storage = createStorage();
 
     public static List<MealTo> get() {
         return getMappedMealList(storage.getAll(), LIMIT);
     }
 
-    public static AbstractMealStorage getStorage() {
+    public static MealStorage getStorage() {
         return storage;
     }
 
-    private static AbstractMealStorage createStorage() {
+    private static MealStorage createStorage() {
         List<Meal> list = Arrays.asList(
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
@@ -34,7 +34,7 @@ public class MealList {
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
-        AbstractMealStorage storage = new MapMealStorage();
+        MealStorage storage = new MapStorage();
         list.forEach(storage::add);
         return storage;
     }

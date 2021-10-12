@@ -1,8 +1,9 @@
 package ru.javawebinar.topjava.web;
 
+import org.slf4j.Logger;
 import ru.javawebinar.topjava.MealList;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.storage.AbstractMealStorage;
+import ru.javawebinar.topjava.storage.MealStorage;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,15 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class MealController extends HttpServlet {
+import static org.slf4j.LoggerFactory.getLogger;
 
-    private static final long serialVersionUID = 1L;
+public class MealController extends HttpServlet {
+    private static final Logger log = getLogger(UserServlet.class);
+
     private static final String INSERT_OR_EDIT = "/editMeal.jsp";
     private static final String LIST_MEAL = "/meals.jsp";
-    private final AbstractMealStorage storage;
+    private MealStorage storage;
 
-    public MealController() {
-        super();
+
+    @Override
+    public void init() {
         storage = MealList.getStorage();
     }
 
@@ -28,15 +32,17 @@ public class MealController extends HttpServlet {
         String forward;
         String action = request.getParameter("action");
         if (action.equalsIgnoreCase("delete")) {
+            log("Controlling servlet. Method doGet, action delete");
             storage.delete(parseId(request));
             forward = LIST_MEAL;
             request.setAttribute("list", MealList.get());
         } else if (action.equalsIgnoreCase("edit")) {
+            log("Controlling servlet. Method doGet, action edit");
             forward = INSERT_OR_EDIT;
             Meal meal = storage.get(parseId(request));
             request.setAttribute("meal", meal);
         } else {
-//            TODO probably better to put plain else if case for insert action
+            log("Controlling servlet. Method doGet, action any other than delete and edit");
             forward = INSERT_OR_EDIT;
         }
 
@@ -47,23 +53,27 @@ public class MealController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String idString = request.getParameter("id").trim();
-        String description = request.getParameter("description");
-        //     TODO check out for parsing exception
-        int calories = Integer.parseInt(request.getParameter("calories").trim());
-        String dateTime = request.getParameter("dateTime");
-        LocalDateTime ldt = LocalDateTime.parse(dateTime);
         if (idString.isEmpty()) {
-            Meal meal = new Meal(ldt, description, calories);
-            storage.add(meal);
+            log("Controlling servlet. Method doPost, id string is empty");
+            storage.add(createMeal(request));
         } else {
-            long id = Long.parseLong(idString);
-            Meal meal = new Meal(ldt, description, calories);
+            log(String.format("Controlling servlet. Method doPost, id string is %s", idString));
+            long id = parseId(request);
+            Meal meal = createMeal(request);
             meal.setId(id);
             storage.update(meal);
         }
         RequestDispatcher view = request.getRequestDispatcher(LIST_MEAL);
         request.setAttribute("list", MealList.get());
         view.forward(request, response);
+    }
+
+    private Meal createMeal(HttpServletRequest request) {
+        String description = request.getParameter("description");
+        int calories = Integer.parseInt(request.getParameter("calories").trim());
+        String dateTime = request.getParameter("dateTime");
+        LocalDateTime ldt = LocalDateTime.parse(dateTime);
+        return new Meal(ldt, description, calories);
     }
 
     private long parseId(HttpServletRequest request) {

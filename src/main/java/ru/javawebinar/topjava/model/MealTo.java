@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class MealTo {
+    private volatile long id;
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -12,8 +14,6 @@ public class MealTo {
     private final int calories;
 
     private final boolean excess;
-
-    private volatile long id;
 
     public MealTo(long id, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.id = id;
