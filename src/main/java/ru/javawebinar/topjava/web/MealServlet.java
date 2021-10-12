@@ -2,9 +2,9 @@ package ru.javawebinar.topjava.web;
 
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.MealList;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.storage.MealStorage;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,7 +24,7 @@ public class MealServlet extends HttpServlet {
     private MealStorage storage;
     @Override
     public void init() {
-        storage = MealList.getStorage();
+        storage = MealsUtil.getStorage();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MealServlet extends HttpServlet {
             storage.update(meal);
         }
         RequestDispatcher view = request.getRequestDispatcher(LIST_MEAL);
-        request.setAttribute("list", MealList.get());
+        request.setAttribute("list", MealsUtil.get());
         view.forward(request, response);
     }
 
@@ -90,7 +90,7 @@ public class MealServlet extends HttpServlet {
     private String showList(HttpServletRequest request) {
         String forward;
         forward = LIST_MEAL;
-        request.setAttribute("list", MealList.get());
+        request.setAttribute("list", MealsUtil.get());
         return forward;
     }
 }
