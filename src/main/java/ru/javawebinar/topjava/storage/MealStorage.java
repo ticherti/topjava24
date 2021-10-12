@@ -7,8 +7,12 @@ import java.util.List;
 public interface MealStorage {
 
     Meal add(Meal meal);
-    Meal get(long id);
+
+    Meal get(int id);
+
     Meal update(Meal meal);
-    void delete(long id);
+
+    void delete(int id);
+
     List<Meal> getAll();
 }

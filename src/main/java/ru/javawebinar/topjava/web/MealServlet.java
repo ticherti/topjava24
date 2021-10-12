@@ -65,7 +65,7 @@ public class MealServlet extends HttpServlet {
             storage.add(createMeal(request));
         } else {
             log(String.format("Controlling servlet. Method doPost, id string is %s", idString));
-            long id = parseId(request);
+            int id = parseId(request);
             Meal meal = createMeal(request);
             meal.setId(id);
             storage.update(meal);
@@ -83,8 +83,8 @@ public class MealServlet extends HttpServlet {
         return new Meal(ldt, description, calories);
     }
 
-    private long parseId(HttpServletRequest request) {
-        return Long.parseLong(request.getParameter("id"));
+    private int parseId(HttpServletRequest request) {
+        return Integer.parseInt(request.getParameter("id"));
     }
 
     private String showList(HttpServletRequest request) {
