@@ -1,7 +1,6 @@
 <%@ page import="ru.javawebinar.topjava.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="list" scope="request" type="java.util.List<ru.javawebinar.topjava.model.MealTo>"/>
 <html>
 <head>
     <title>Meals</title>
