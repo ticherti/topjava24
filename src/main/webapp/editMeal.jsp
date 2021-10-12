@@ -25,6 +25,7 @@
     <input type="datetime-local" name="dateTime" value="${meal.dateTime}">
     <br/>
     <input type="submit" value="Submit"/>
+    <input type="button" onclick="history.back();" value="Cancel"/>
 </form>
 </body>
 </html>
