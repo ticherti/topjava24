@@ -1,31 +1,35 @@
 package ru.javawebinar.topjava.web;
 
-
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealTo;
+import ru.javawebinar.topjava.storage.InMemoryMealStorage;
 import ru.javawebinar.topjava.storage.MealStorage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static ru.javawebinar.topjava.util.MealsUtil.filteredByStreams;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
 
+    private static final int LIMIT = 2000;
     private static final String INSERT_OR_EDIT = "/editMeal.jsp";
     private static final String LIST_MEAL = "/meals.jsp";
     private MealStorage storage;
 
     @Override
     public void init() {
-        storage = MealsUtil.getStorage();
+        storage = new InMemoryMealStorage();
+        MealsUtil.getTestMealList().forEach(storage::add);
     }
 
     @Override
@@ -58,7 +62,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.debug("Controlling servlet. Method doGet, action is unknown or empty");
 
-                request.setAttribute("list", MealsUtil.get());
+                request.setAttribute("list", getList());
                 request.getRequestDispatcher(LIST_MEAL).forward(request, response);
         }
     }
@@ -72,8 +76,7 @@ public class MealServlet extends HttpServlet {
             storage.add(meal);
         } else {
             log.debug(String.format("Controlling servlet. Method doPost, id string is %s", idString));
-            int id = parseId(request);
-            meal.setId(id);
+            meal.setId(parseId(request));
             storage.update(meal);
         }
         response.sendRedirect("meals");
@@ -89,5 +92,9 @@ public class MealServlet extends HttpServlet {
 
     private int parseId(HttpServletRequest request) {
         return Integer.parseInt(request.getParameter("id"));
+    }
+
+    private List<MealTo> getList() {
+        return filteredByStreams(storage.getAll(), everyMeal -> true, LIMIT);
     }
 }
