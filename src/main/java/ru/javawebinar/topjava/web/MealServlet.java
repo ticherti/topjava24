@@ -32,56 +32,51 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meal");
 
-        String forward;
         String action = request.getParameter("action");
-        if (action == null){
+        if (action == null) {
             action = "default";
         }
         switch (action) {
             case "delete":
-                log("Controlling servlet. Method doGet, action delete");
+                log.debug("Controlling servlet. Method doGet, action delete");
+
                 storage.delete(parseId(request));
-                forward = showList(request);
+                response.sendRedirect("meals");
                 break;
             case "edit":
-                log("Controlling servlet. Method doGet, action edit");
-                forward = INSERT_OR_EDIT;
+                log.debug("Controlling servlet. Method doGet, action edit");
+
                 Meal meal = storage.get(parseId(request));
                 request.setAttribute("meal", meal);
+                request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
                 break;
             case "insert":
-                log("Controlling servlet. Method doGet, action insert");
-                forward = INSERT_OR_EDIT;
+                log.debug("Controlling servlet. Method doGet, action insert");
+
+                request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
                 break;
             default:
-                log("Controlling servlet. Method doGet, action is unknown or empty");
-                forward = showList(request);
+                log.debug("Controlling servlet. Method doGet, action is unknown or empty");
+
+                request.setAttribute("list", MealsUtil.get());
+                request.getRequestDispatcher(LIST_MEAL).forward(request, response);
         }
-        RequestDispatcher view = request.getRequestDispatcher(forward);
-        view.forward(request, response);
-//        request.setAttribute("list", MealList.get());
-//        request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String idString = request.getParameter("id").trim();
+        Meal meal = createMeal(request);
         if (idString.isEmpty()) {
-            log("Controlling servlet. Method doPost, id string is empty");
-            storage.add(createMeal(request));
+            log.debug("Controlling servlet. Method doPost, id string is empty");
+            storage.add(meal);
         } else {
-            log(String.format("Controlling servlet. Method doPost, id string is %s", idString));
+            log.debug(String.format("Controlling servlet. Method doPost, id string is %s", idString));
             int id = parseId(request);
-            Meal meal = createMeal(request);
             meal.setId(id);
             storage.update(meal);
         }
         response.sendRedirect("meals");
-//        DO NOT DELETE unobserved:
-//        RequestDispatcher view = request.getRequestDispatcher(LIST_MEAL);
-//        request.setAttribute("list", MealsUtil.get());
-//        view.forward(request, response);
-
     }
 
     private Meal createMeal(HttpServletRequest request) {
@@ -94,12 +89,5 @@ public class MealServlet extends HttpServlet {
 
     private int parseId(HttpServletRequest request) {
         return Integer.parseInt(request.getParameter("id"));
-    }
-
-    private String showList(HttpServletRequest request) {
-        String forward;
-        forward = LIST_MEAL;
-        request.setAttribute("list", MealsUtil.get());
-        return forward;
     }
 }
