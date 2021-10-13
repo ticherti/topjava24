@@ -65,7 +65,7 @@ public class MealServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String idString = request.getParameter("id").trim();
+        String idString = request.getParameter("id");
         Meal meal = createMeal(request);
         if (idString.isEmpty()) {
             log.debug("Controlling servlet. Method doPost, id string is empty");
