@@ -4,22 +4,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
     private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
+
+    //todo дополнительно: попробуйте сделать реализацию атомарной
+// (те учесть коллизии при одновременном изменении еды одного пользователя)
 
     //    now all the list is for one mock user
     {
@@ -57,11 +59,13 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Collection<Meal> getAll(int authId) {
-        log.info("getAee {}", authId);
-        return getUserMeals(authId).values();
+        log.info("getAll {}", authId);
+        return getUserMeals(authId).values().stream()
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
     }
 
-    private Map<Integer, Meal> getUserMeals(int authId){
+    private Map<Integer, Meal> getUserMeals(int authId) {
         return Optional.ofNullable(repository.get(authId)).orElse(Collections.emptyMap());
     }
 }
