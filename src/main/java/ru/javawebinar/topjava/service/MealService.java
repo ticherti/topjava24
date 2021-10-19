@@ -19,8 +19,8 @@ public class MealService {
         return repository.save(authId, meal, id);
     }
 
-    public void delete(int authId, int id) {
-        repository.delete(authId, id);
+    public boolean delete(int authId, int id) {
+        return repository.delete(authId, id);
     }
 
     public Meal get(int authId, int mealId) {

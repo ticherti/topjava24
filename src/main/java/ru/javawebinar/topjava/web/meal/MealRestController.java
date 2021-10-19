@@ -11,6 +11,8 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -19,36 +21,51 @@ public class MealRestController {
 
     @Autowired
     private MealService service;
+// todo check if it should return MealTo.
+    public Meal get(int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("get {}, {}", userId, id);
+        Meal meal = service.get(userId, id);
+        check(meal);
+        return meal;
+    }
 
-    public List<MealTo> getAll(int userId) {
+    public Meal create(Meal meal, int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("create {}, {}", userId, meal);
+        meal = service.create(userId, meal, id);
+//      todo check it out. Because it really doesn't work for the reason of:
+//       userMeals.computeIfPresent(id, (mealId, oldMeal) -> meal) in save() in repo
+        check(meal);
+        return meal;
+    }
+
+    public boolean delete(int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("delete {}, {}", userId, id);
+        Meal meal = service.get(userId, id);
+        check(meal);
+        return service.delete(userId, id);
+    }
+
+    public List<MealTo> getAll() {
+        int userId = SecurityUtil.authUserId();
         log.info("getAll {}", userId);
-        assureIdConsistent(userId);
 
         return MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
     }
 
-    public Meal get(int userId, int mealId) {
-        log.info("get {}, {}", userId, mealId);
-        assureIdConsistent(userId);
-        return service.get(userId, mealId);
+    public List<MealTo> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        log.info("getAll filtered {}, date {} - {}, time {} - {}", userId, startDate, endDate, startTime, endTime);
+
+        return MealsUtil.getFilteredTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay(),
+                startDate, endDate, startTime, endTime);
     }
 
-    public Meal create(int userId, Meal meal, int id) {
-        log.info("create {}, {}", userId, meal);
-        assureIdConsistent(userId);
-        return service.create(userId, meal, id);
-    }
-
-    public void delete(int userId, int id) {
-        log.info("delete {}, {}", userId, id);
-        assureIdConsistent(userId);
-        service.delete(userId, id);
-    }
-
-    //    todo should it be in some mealValidationUtil ?
-    private static void assureIdConsistent(int userId) {
-        if (userId != SecurityUtil.authUserId()) {
-            throw new NotFoundException("Not right user " + userId);
+    private Meal check(Meal meal) {
+        if (meal == null) {
+            throw new NotFoundException("Meal not found.");
         }
+        return meal;
     }
 }
