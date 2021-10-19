@@ -15,8 +15,8 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal create(int authId, Meal meal, int id) {
-        return repository.save(authId, meal, id);
+    public Meal save(int authId, Meal meal) {
+        return repository.save(authId, meal);
     }
 
     public boolean delete(int authId, int id) {

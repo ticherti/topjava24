@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,16 +17,15 @@ public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    //todo дополнительно: попробуйте сделать реализацию атомарной
-// (те учесть коллизии при одновременном изменении еды одного пользователя)
+    //todo дополнительно: попробуйте сделать реализацию атомарной (те учесть коллизии при одновременном изменении еды одного пользователя)
 
     //    now all the list is for one mock user
-    {
-        MealsUtil.meals.forEach(meal -> save(SecurityUtil.authUserId(), meal, meal.getId()));
-    }
+//    {
+//        MealsUtil.meals.forEach(meal -> save(SecurityUtil.authUserId(), meal, meal.getId()));
+//    }
 
     @Override
-    public Meal save(int authId, Meal meal, int id) {
+    public Meal save(int authId, Meal meal) {
         log.info("save {}, {}", authId, meal);
         if (repository.get(authId) == null) {
             repository.put(authId, new ConcurrentHashMap<>());
@@ -41,7 +38,7 @@ public class InMemoryMealRepository implements MealRepository {
             return meal;
         }
         // handle case: update, but not present in storage
-        return userMeals.computeIfPresent(id, (mealId, oldMeal) -> meal);
+        return userMeals.computeIfPresent(meal.getId(), (mealId, oldMeal) -> meal);
     }
 
     @Override

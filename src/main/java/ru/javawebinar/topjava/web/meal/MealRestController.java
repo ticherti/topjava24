@@ -30,10 +30,10 @@ public class MealRestController {
         return meal;
     }
 
-    public Meal create(Meal meal, int id) {
+    public Meal save(Meal meal) {
         int userId = SecurityUtil.authUserId();
         log.info("create {}, {}", userId, meal);
-        meal = service.create(userId, meal, id);
+        meal = service.save(userId, meal);
 //      todo check it out. Because it really doesn't work for the reason of:
 //       userMeals.computeIfPresent(id, (mealId, oldMeal) -> meal) in save() in repo
         check(meal);

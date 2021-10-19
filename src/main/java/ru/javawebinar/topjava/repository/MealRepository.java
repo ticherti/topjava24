@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface MealRepository {
     // null if updated meal do not belong to userId
-    Meal save(int authId, Meal meal, int id);
+    Meal save(int authId, Meal meal);
 
     // false if meal do not belong to userId
     boolean delete(int authId, int id);
