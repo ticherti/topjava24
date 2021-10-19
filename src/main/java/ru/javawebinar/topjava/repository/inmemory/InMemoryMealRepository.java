@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
@@ -25,11 +24,11 @@ public class InMemoryMealRepository implements MealRepository {
 
     //    now all the list is for one mock user
     {
-        MealsUtil.meals.forEach(meal -> save(SecurityUtil.authUserId(), meal));
+        MealsUtil.meals.forEach(meal -> save(SecurityUtil.authUserId(), meal, meal.getId()));
     }
 
     @Override
-    public Meal save(int authId, Meal meal) {
+    public Meal save(int authId, Meal meal, int id) {
         log.info("save {}, {}", authId, meal);
         if (repository.get(authId) == null) {
             repository.put(authId, new ConcurrentHashMap<>());
@@ -42,7 +41,7 @@ public class InMemoryMealRepository implements MealRepository {
             return meal;
         }
         // handle case: update, but not present in storage
-        return userMeals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        return userMeals.computeIfPresent(id, (mealId, oldMeal) -> meal);
     }
 
     @Override

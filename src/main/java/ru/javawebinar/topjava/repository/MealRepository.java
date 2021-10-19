@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface MealRepository {
     // null if updated meal do not belong to userId
-    Meal save(int authId, Meal meal);
+    Meal save(int authId, Meal meal, int id);
 
     // false if meal do not belong to userId
     boolean delete(int authId, int id);
@@ -15,5 +15,6 @@ public interface MealRepository {
     Meal get(int authId, int id);
 
     // ORDERED dateTime desc
+//    todo maybe it can be List? if so change it for all the layers
     Collection<Meal> getAll(int authId);
 }
