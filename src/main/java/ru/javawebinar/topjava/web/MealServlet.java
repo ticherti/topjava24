@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -15,7 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public class MealServlet extends HttpServlet {
     public void init() {
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealRestController = appCtx.getBean(MealRestController.class);
-        MealsUtil.meals.forEach(meal -> mealRestController.save( meal));
+        MealsUtil.meals.forEach(meal -> mealRestController.save(meal));
     }
 
     //todo for every SecurityUtil.authUserId() check out from where it should come
@@ -67,6 +67,15 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
+            case "allFiltered":
+                log.info("get all filtered");
+                request.setAttribute("meals", mealRestController.getAllFiltered(
+                        getDate(request.getParameter("startDate"), true),
+                        getDate(request.getParameter("endDate"), false),
+                        getTime(request.getParameter("startTime"), true),
+                        getTime(request.getParameter("endTime"), false)));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
             case "all":
             default:
                 log.info("getAll");
@@ -80,4 +89,23 @@ public class MealServlet extends HttpServlet {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
+
+    private LocalDate getDate(String date, Boolean isStart) {
+        try {
+            return LocalDate.parse(date);
+        } catch (Exception e) {
+            log.info("getDate can't parte {}", date);
+            return isStart ? LocalDate.MIN : LocalDate.MAX;
+        }
+    }
+
+    private LocalTime getTime(String time, Boolean isStart) {
+        try {
+            return LocalTime.parse(time);
+        } catch (Exception e) {
+            log.info("getTime can't parte {}", time);
+            return isStart ? LocalTime.MIN : LocalTime.MAX;
+        }
+    }
+
 }
