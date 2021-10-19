@@ -85,6 +85,11 @@ public class MealServlet extends HttpServlet {
         }
     }
 
+    @Override
+    public void destroy() {
+        appCtx.close();
+    }
+
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
@@ -94,7 +99,7 @@ public class MealServlet extends HttpServlet {
         try {
             return LocalDate.parse(date);
         } catch (Exception e) {
-            log.info("getDate can't parte {}", date);
+            log.info("getDate can't parse {}", date);
             return isStart ? LocalDate.MIN : LocalDate.MAX;
         }
     }
@@ -103,7 +108,7 @@ public class MealServlet extends HttpServlet {
         try {
             return LocalTime.parse(time);
         } catch (Exception e) {
-            log.info("getTime can't parte {}", time);
+            log.info("getTime can't parse {}", time);
             return isStart ? LocalTime.MIN : LocalTime.MAX;
         }
     }
