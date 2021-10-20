@@ -56,6 +56,4 @@ public class MealRestController {
         return MealsUtil.getFilteredTos(service.getAllFiltered(userId, startDate, endDate),
                 SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
-
-
 }
