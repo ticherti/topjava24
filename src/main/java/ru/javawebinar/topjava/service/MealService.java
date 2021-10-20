@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Service
 public class MealService {
@@ -16,22 +16,23 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal save(int authId, Meal meal) {
-        return repository.save(authId, meal);
+    public Meal save(int userId, Meal meal) {
+        return repository.save(userId, meal);
     }
 
-    public boolean delete(int authId, int id) {
-        return repository.delete(authId, id);
+    public boolean delete(int userId, int id) {
+        return repository.delete(userId, id);
     }
 
-    public Meal get(int authId, int mealId) {
-        return repository.get(authId, mealId);
+    public Meal get(int userId, int mealId) {
+        return repository.get(userId, mealId);
     }
 
-    public List<Meal> getAll(int authId) {
-        return repository.getAll(authId);
+    public List<Meal> getAll(int userId) {
+        return repository.getAll(userId);
     }
-    public List<Meal> getAllFiltered(int authId, Predicate<Meal> predicate) {
-        return repository.getAllFiltered(authId, predicate);
+
+    public List<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository.getAllFiltered(userId, startDate, endDate);
     }
 }

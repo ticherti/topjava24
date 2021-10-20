@@ -6,11 +6,14 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static ru.javawebinar.topjava.util.DateTimeUtil.isBetweenDays;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
@@ -28,7 +31,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Meal save(int userId, Meal meal) {
         log.info("save {}, {}", userId, meal);
-        repository.putIfAbsent(userId, new ConcurrentHashMap<>() );
+        repository.putIfAbsent(userId, new ConcurrentHashMap<>());
         Map<Integer, Meal> userMeals = getUserMeals(userId);
 
         if (meal.isNew()) {
@@ -55,19 +58,23 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         log.info("getAll {}", userId);
-        return getAllFiltered(userId, meal -> true);
+        return getFilteredByPredicate(userId, meal -> true);
     }
 
-    public List<Meal> getAllFiltered(int userId, Predicate<Meal> predicate) {
+    public List<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate) {
         log.info("getAll filtered {}", userId);
-        return getUserMeals(userId).values().stream()
-                .filter(predicate)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        return getFilteredByPredicate(userId, meal -> isBetweenDays(meal.getDate(), startDate, endDate));
     }
 
     private Map<Integer, Meal> getUserMeals(int userId) {
         return Optional.ofNullable(repository.get(userId)).orElse(Collections.emptyMap());
+    }
+
+    private List<Meal> getFilteredByPredicate(int userId, Predicate<Meal> predicate) {
+        return getUserMeals(userId).values().stream()
+                .filter(predicate)
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
     }
 }
 
