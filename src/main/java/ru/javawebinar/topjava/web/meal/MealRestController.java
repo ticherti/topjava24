@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
@@ -15,13 +16,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.DateTimeUtil.isBetweenDays;
+import static ru.javawebinar.topjava.util.DateTimeUtil.isBetweenHalfOpen;
+
 @Controller
 public class MealRestController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private MealService service;
-// todo check if it should return MealTo.
+
     public Meal get(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("get {}, {}", userId, id);
@@ -59,8 +63,9 @@ public class MealRestController {
         int userId = SecurityUtil.authUserId();
         log.info("getAll filtered {}, date {} - {}, time {} - {}", userId, startDate, endDate, startTime, endTime);
 
-        return MealsUtil.getFilteredTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay(),
-                startDate, endDate, startTime, endTime);
+        return MealsUtil.getTos(service.getAllFiltered(userId, meal ->
+                isBetweenHalfOpen(meal.getTime(), startTime, endTime) && isBetweenDays(meal.getDate(), startDate, endDate)),
+                SecurityUtil.authUserCaloriesPerDay());
     }
 
     private Meal check(Meal meal) {

@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class MealService {
@@ -28,6 +29,9 @@ public class MealService {
     }
 
     public List<Meal> getAll(int authId) {
-        return (List<Meal>) repository.getAll(authId);
+        return repository.getAll(authId);
+    }
+    public List<Meal> getAllFiltered(int authId, Predicate<Meal> predicate) {
+        return repository.getAllFiltered(authId, predicate);
     }
 }

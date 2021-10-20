@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -25,12 +26,10 @@ public class InMemoryMealRepository implements MealRepository {
 //    }
 
     @Override
-    public Meal save(int authId, Meal meal) {
-        log.info("save {}, {}", authId, meal);
-        if (repository.get(authId) == null) {
-            repository.put(authId, new ConcurrentHashMap<>());
-        }
-        Map<Integer, Meal> userMeals = getUserMeals(authId);
+    public Meal save(int userId, Meal meal) {
+        log.info("save {}, {}", userId, meal);
+        repository.putIfAbsent(userId, new ConcurrentHashMap<>() );
+        Map<Integer, Meal> userMeals = getUserMeals(userId);
 
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
@@ -42,27 +41,33 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public boolean delete(int authId, int id) {
-        log.info("delete {}, {}", authId, id);
-        return getUserMeals(authId).remove(id) != null;
+    public boolean delete(int userId, int id) {
+        log.info("delete {}, {}", userId, id);
+        return getUserMeals(userId).remove(id) != null;
     }
 
     @Override
-    public Meal get(int authId, int id) {
-        log.info("get {}, {}", authId, id);
-        return getUserMeals(authId).get(id);
+    public Meal get(int userId, int id) {
+        log.info("get {}, {}", userId, id);
+        return getUserMeals(userId).get(id);
     }
 
     @Override
-    public Collection<Meal> getAll(int authId) {
-        log.info("getAll {}", authId);
-        return getUserMeals(authId).values().stream()
+    public List<Meal> getAll(int userId) {
+        log.info("getAll {}", userId);
+        return getAllFiltered(userId, meal -> true);
+    }
+
+    public List<Meal> getAllFiltered(int userId, Predicate<Meal> predicate) {
+        log.info("getAll filtered {}", userId);
+        return getUserMeals(userId).values().stream()
+                .filter(predicate)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
 
-    private Map<Integer, Meal> getUserMeals(int authId) {
-        return Optional.ofNullable(repository.get(authId)).orElse(Collections.emptyMap());
+    private Map<Integer, Meal> getUserMeals(int userId) {
+        return Optional.ofNullable(repository.get(userId)).orElse(Collections.emptyMap());
     }
 }
 

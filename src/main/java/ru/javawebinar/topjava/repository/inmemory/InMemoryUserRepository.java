@@ -52,15 +52,10 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-//    todo find out
-//    Is it alright?! Having a map to do quick operations and use it to lazy check every element to find the answer?
-//    The best decision possible?
-//    The double email will be handled by database.
-//    todo if it is handled by database then using findFirst may be not the best option.
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
         return repository.values().stream()
-                .filter(user -> user.getEmail().equals(email))
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
                 .orElse(null);
     }

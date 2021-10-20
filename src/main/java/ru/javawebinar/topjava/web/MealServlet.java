@@ -29,10 +29,12 @@ public class MealServlet extends HttpServlet {
     public void init() {
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealRestController = appCtx.getBean(MealRestController.class);
-        MealsUtil.meals.forEach(meal -> mealRestController.save(meal));
+        SecurityUtil.setId(1);
+        MealsUtil.meals1.forEach(mealRestController::save);
+        SecurityUtil.setId(2);
+        MealsUtil.meals2.forEach(mealRestController::save);
     }
 
-    //todo for every SecurityUtil.authUserId() check out from where it should come
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -96,21 +98,17 @@ public class MealServlet extends HttpServlet {
     }
 
     private LocalDate getDate(String date, Boolean isStart) {
-        try {
-            return LocalDate.parse(date);
-        } catch (Exception e) {
-            log.info("getDate can't parse {}", date);
+        if (date.isEmpty()) {
             return isStart ? LocalDate.MIN : LocalDate.MAX;
         }
+        return LocalDate.parse(date);
     }
 
     private LocalTime getTime(String time, Boolean isStart) {
-        try {
-            return LocalTime.parse(time);
-        } catch (Exception e) {
-            log.info("getTime can't parse {}", time);
+        if (time.isEmpty()) {
             return isStart ? LocalTime.MIN : LocalTime.MAX;
         }
+        return LocalTime.parse(time);
     }
 
 }
