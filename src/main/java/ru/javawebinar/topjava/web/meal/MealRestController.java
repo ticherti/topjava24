@@ -8,7 +8,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
@@ -25,27 +24,22 @@ public class MealRestController {
     public Meal get(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("get {}, {}", userId, id);
-        Meal meal = service.get(userId, id);
-        check(meal);
-        return meal;
+
+        return service.get(userId, id);
     }
 
     public Meal save(Meal meal) {
         int userId = SecurityUtil.authUserId();
         log.info("create {}, {}", userId, meal);
-        meal = service.save(userId, meal);
-//      todo check it out. Because it really doesn't work for the reason of:
-//       userMeals.computeIfPresent(id, (mealId, oldMeal) -> meal) in save() in repo
-        check(meal);
-        return meal;
+
+        return service.save(userId, meal);
     }
 
-    public boolean delete(int id) {
+    public void delete(int id) {
         int userId = SecurityUtil.authUserId();
         log.info("delete {}, {}", userId, id);
-        Meal meal = service.get(userId, id);
-        check(meal);
-        return service.delete(userId, id);
+
+        service.delete(userId, id);
     }
 
     public List<MealTo> getAll() {
@@ -63,10 +57,5 @@ public class MealRestController {
                 SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
     }
 
-    private Meal check(Meal meal) {
-        if (meal == null) {
-            throw new NotFoundException("Meal not found.");
-        }
-        return meal;
-    }
+
 }
