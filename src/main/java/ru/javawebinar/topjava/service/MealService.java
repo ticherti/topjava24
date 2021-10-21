@@ -22,7 +22,11 @@ public class MealService {
     }
 
     public Meal save(int userId, Meal meal) {
-        return checkNotFoundWithId(repository.save(userId, meal), userId);
+        return repository.save(userId, meal);
+    }
+
+    public Meal update(int userId, Meal meal, int id) {
+        return checkNotFoundWithId(repository.save(userId, meal), id);
     }
 
     public void delete(int userId, int id) {

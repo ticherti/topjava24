@@ -21,17 +21,10 @@ public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    //todo дополнительно: попробуйте сделать реализацию атомарной (те учесть коллизии при одновременном изменении еды одного пользователя)
-
-    //    now all the list is for one mock user
-//    {
-//        MealsUtil.meals.forEach(meal -> save(SecurityUtil.authUserId(), meal, meal.getId()));
-//    }
-
     @Override
     public Meal save(int userId, Meal meal) {
         log.info("save {}, {}", userId, meal);
-        repository.putIfAbsent(userId, new ConcurrentHashMap<>());
+        repository.computeIfAbsent(userId, x -> new ConcurrentHashMap<>());
         Map<Integer, Meal> userMeals = getUserMeals(userId);
 
         if (meal.isNew()) {

@@ -39,7 +39,7 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
-
+// TODO CHECK ALL THE CREATE UPDATE
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
@@ -61,6 +61,7 @@ public class MealServlet extends HttpServlet {
                 mealRestController.delete(id);
                 response.sendRedirect("meals");
                 break;
+//                todo check all the create-update
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
@@ -76,10 +77,7 @@ public class MealServlet extends HttpServlet {
                 String startTime = request.getParameter("startTime");
                 String endTime = request.getParameter("endTime");
                 request.setAttribute("meals", mealRestController.getAllFiltered(
-                        getDate(startDate, true),
-                        getDate(endDate, false),
-                        getTime(startTime, true),
-                        getTime(endTime, false)));
+                        parseDate(startDate), parseDate(endDate), parseTime(startTime), parseTime(endTime)));
                 request.setAttribute("startDate", startDate);
                 request.setAttribute("endDate", endDate);
                 request.setAttribute("startTime", startTime);
@@ -104,19 +102,10 @@ public class MealServlet extends HttpServlet {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
-
-    private LocalDate getDate(String date, Boolean isStart) {
-        if (date.isEmpty()) {
-            return isStart ? LocalDate.MIN : LocalDate.MAX;
-        }
-        return LocalDate.parse(date);
+    private LocalDate parseDate(String line) {
+        return line.isEmpty() ? null : LocalDate.parse(line);
     }
-
-    private LocalTime getTime(String time, Boolean isStart) {
-        if (time.isEmpty()) {
-            return isStart ? LocalTime.MIN : LocalTime.MAX;
-        }
-        return LocalTime.parse(time);
+    private LocalTime parseTime(String line) {
+        return line.isEmpty() ? null : LocalTime.parse(line);
     }
-
 }
