@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -45,8 +44,8 @@ public class MealServiceTest {
         Integer newId = actual.getId();
         Meal expected = getNew();
         expected.setId(newId);
-        assertThat(actual).isEqualTo(expected);
-        assertThat(service.get(newId, USER_ID)).isEqualTo(expected);
+        assertMatch(actual, expected);
+        assertMatch(service.get(newId, USER_ID), expected);
     }
 
     @Test
@@ -57,41 +56,41 @@ public class MealServiceTest {
 
     @Test
     public void delete() {
-        service.delete(MEAL1_ID, USER_ID);
+        service.delete(USER_MEAL1_ID, USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(USER_MEAL1.getId(), USER_ID));
     }
 
     @Test
     public void deleteNotUsers() {
-        assertThrows(NotFoundException.class, () -> service.delete(MEAL3_ID, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(ADMIN_MEAL3_ID, USER_ID));
     }
 
     @Test
     public void deletedNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(6, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOBODY_MEAL_ID, USER_ID));
     }
 
     @Test
     public void get() {
         Meal actual = service.get(USER_MEAL1.getId(), USER_ID);
-        assertThat(actual).isEqualTo(USER_MEAL1);
+        assertMatch(actual, USER_MEAL1);
     }
 
     @Test
     public void getNotUsers() {
-        assertThrows(NotFoundException.class, () -> service.get(MEAL3_ID, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(ADMIN_MEAL3_ID, USER_ID));
     }
 
     @Test
     public void getNotFound() {
-        assertThrows(NotFoundException.class, () -> service.get(6, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOBODY_MEAL_ID, USER_ID));
     }
 
     @Test
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
-        assertThat(service.get(updated.getId(), USER_ID)).isEqualTo(updated);
+        assertMatch(service.get(updated.getId(), USER_ID), getUpdated());
     }
 
     @Test
@@ -103,31 +102,24 @@ public class MealServiceTest {
     public void updateNotFound() {
         Meal updated = getNew();
         service.update(updated, USER_ID);
-        assertThat(service.get(updated.getId(), USER_ID)).isEqualTo(updated);
+        assertMatch(service.get(updated.getId(), USER_ID), updated);
     }
 
     @Test
     public void getAll() {
         List<Meal> actual = service.getAll(USER_ID);
-        assertThat(actual).isEqualTo(fillExpectedMealList());
+        assertMatch(actual, USER_MEAL2, USER_MEAL1);
     }
 
     public void testGetBetweenInclusive() {
         List<Meal> actual = service.getBetweenInclusive(LocalDate.of(2020, 10, 24), LocalDate.of(2020, 10, 24), USER_ID);
         List<Meal> expected = new ArrayList<>();
         expected.add(USER_MEAL1);
-        assertThat(actual).isEqualTo(expected);
+        assertMatch(actual, expected);
     }
 
     public void testGetBetweenInclusiveNull() {
         List<Meal> actual = service.getBetweenInclusive(null, null, USER_ID);
-        assertThat(actual).isEqualTo(fillExpectedMealList());
-    }
-
-    private List<Meal> fillExpectedMealList() {
-        List<Meal> expected = new ArrayList<>();
-        expected.add(USER_MEAL2);
-        expected.add(USER_MEAL1);
-        return expected;
+        assertMatch(actual, USER_MEAL2, USER_MEAL1);
     }
 }
