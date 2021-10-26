@@ -15,16 +15,16 @@ public class MealTestData {
     public static final int NOBODY_MEAL_ID = 6;
     public static final LocalDateTime MEAL1_DT = LocalDateTime.of(2021, 10, 24, 10, 0);
 
-    public static final Meal USER_MEAL1 = new Meal(USER_MEAL1_ID, MEAL1_DT, "English tea", 100);
-    public static final Meal USER_MEAL2 = new Meal(USER_MEAL2_ID, LocalDateTime.of(2021, 10, 25, 11, 0), "English breakfast", 500);
-    public static final Meal ADMIN_MEAL3 = new Meal(ADMIN_MEAL3_ID, LocalDateTime.of(2021, 10, 26, 10, 0), "Русский мерзкий чай с молоком", 150);
+    public static final Meal user_meal1 = new Meal(USER_MEAL1_ID, MEAL1_DT, "English tea", 100);
+    public static final Meal user_meal2 = new Meal(USER_MEAL2_ID, LocalDateTime.of(2021, 10, 25, 11, 0), "English breakfast", 500);
+    public static final Meal admin_meal1 = new Meal(ADMIN_MEAL3_ID, LocalDateTime.of(2021, 10, 26, 10, 0), "Русский мерзкий чай с молоком", 150);
 
     public static Meal getNew() {
         return new Meal(null, LocalDateTime.of(2121, 10, 1, 0, 0), "test new meal", 500);
     }
 
     public static Meal getUpdated() {
-        Meal updated = new Meal(USER_MEAL1);
+        Meal updated = new Meal(user_meal1);
         updated.setDateTime(LocalDateTime.of(2030, 1, 1, 0, 0));
         updated.setDescription("Updated meal new description");
         updated.setCalories(330);
@@ -32,7 +32,7 @@ public class MealTestData {
     }
 
     public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).usingRecursiveComparison().ignoringFields().isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
@@ -40,6 +40,6 @@ public class MealTestData {
     }
 
     public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).usingRecursiveFieldByFieldElementComparatorIgnoringFields().isEqualTo(expected);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
