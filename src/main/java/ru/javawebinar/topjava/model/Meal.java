@@ -44,7 +44,6 @@ public class Meal extends AbstractBaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
-//    todo check if this is the right place for cascade
     private User user;
 
     public Meal() {

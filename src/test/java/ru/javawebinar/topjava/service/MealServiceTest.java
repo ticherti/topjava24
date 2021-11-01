@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +17,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -27,8 +32,33 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(MealService.class);
+
+    private static final StringBuilder results = new StringBuilder();
+
+    @Rule
+    public final Stopwatch STOPWATCH = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            String result = String.format("%-95s %7d", description.getDisplayName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            results.append('\n').append(result).append('\n');
+            log.info(result + " ms\n");
+        }
+    };
+
+    @BeforeClass
+    public static void beforeClass() {
+        results.setLength(0);
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        log.info(results.toString());
+    }
+
     @Autowired
     private MealService service;
+
 
     @Test
     public void delete() {
@@ -100,8 +130,8 @@ public class MealServiceTest {
     @Test
     public void getBetweenInclusive() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(
-                        LocalDate.of(2020, Month.JANUARY, 30),
-                        LocalDate.of(2020, Month.JANUARY, 30), USER_ID),
+                LocalDate.of(2020, Month.JANUARY, 30),
+                LocalDate.of(2020, Month.JANUARY, 30), USER_ID),
                 meal3, meal2, meal1);
     }
 
