@@ -26,7 +26,7 @@ public class User extends AbstractNamedEntity {
 
     public static final String DELETE = "User.delete";
     public static final String BY_EMAIL = "User.getByEmail";
-    public static final String ALL_SORTED = "User.getAll";
+    public static final String ALL_SORTED = "User.User.getAllSorted";
 
     @Column(name = "email", nullable = false, unique = true)
     @Email

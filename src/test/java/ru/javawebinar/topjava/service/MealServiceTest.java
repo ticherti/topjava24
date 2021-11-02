@@ -1,6 +1,9 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -32,7 +35,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(MealService.class);
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
     private static final StringBuilder results = new StringBuilder();
 
@@ -40,9 +43,9 @@ public class MealServiceTest {
     public final Stopwatch STOPWATCH = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String result = String.format("%-95s %7d", description.getDisplayName(), TimeUnit.NANOSECONDS.toMillis(nanos));
-            results.append('\n').append(result).append('\n');
-            log.info(result + " ms\n");
+            String result = String.format("%-95s %7d ms\n", description.getDisplayName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            results.append(result);
+            log.info(result);
         }
     };
 
@@ -58,7 +61,6 @@ public class MealServiceTest {
 
     @Autowired
     private MealService service;
-
 
     @Test
     public void delete() {
@@ -91,7 +93,6 @@ public class MealServiceTest {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
-
 
     @Test
     public void get() {
