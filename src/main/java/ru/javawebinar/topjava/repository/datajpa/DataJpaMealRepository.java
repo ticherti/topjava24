@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.repository.datajpa;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
@@ -23,13 +22,10 @@ public class DataJpaMealRepository implements MealRepository {
     @Transactional
     @Override
     public Meal save(Meal meal, int userId) {
-        User user = crudUserRepository.getById(userId);
-        meal.setUser(user);
-        if (meal.isNew()) {
-            return crudMealRepository.save(meal);
-        } else if (get(meal.id(), userId) == null) {
+        if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
         }
+        meal.setUser(crudUserRepository.getById(userId));
         return crudMealRepository.save(meal);
     }
 
@@ -40,13 +36,12 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-//        todo Ask: why crudMealRepository.getById(id) doesn't work in next comment line, but findBy does?
-//        return crudMealRepository.findById(id).orElse(null);
         return crudMealRepository.findByIdAndUserId(id, userId);
     }
+
     @Override
     public List<Meal> getAll(int userId) {
-        return crudMealRepository.getAllByUserIdOrderByDateTimeDesc(userId);
+        return crudMealRepository.getAll(userId);
     }
 
     @Override
