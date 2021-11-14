@@ -9,7 +9,7 @@ import ru.javawebinar.topjava.Profiles;
 
 import java.time.LocalDateTime;
 
-@Profile(Profiles.HSQL_DB)
+@Profile(Profiles.POSTGRES_DB)
 @Repository
 public class PostgresJdbcMealRepository extends AbstractJdbcMealRepository {
 
