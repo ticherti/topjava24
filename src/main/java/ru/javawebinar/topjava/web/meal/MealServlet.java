@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;

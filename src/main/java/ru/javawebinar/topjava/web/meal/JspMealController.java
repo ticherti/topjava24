@@ -1,14 +1,14 @@
-package ru.javawebinar.topjava.web;
+package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.web.meal.MealRestController;
+import ru.javawebinar.topjava.service.MealService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,9 +19,11 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
 @RequestMapping("/meals")
-public class JspMealController {
-    @Autowired
-    private MealRestController mealController;
+public class JspMealController extends AbstractMealController {
+
+    public JspMealController(MealService service) {
+        super(service);
+    }
 
     @GetMapping()
     public String getMeals(
@@ -36,24 +38,24 @@ public class JspMealController {
             LocalDate endDate = parseLocalDate(endDateInput);
             LocalTime startTime = parseLocalTime(startTimeInput);
             LocalTime endTime = parseLocalTime(endTimeInput);
-            model.addAttribute("meals", mealController.getBetween(startDate, startTime, endDate, endTime));
+            model.addAttribute("meals", super.getBetween(startDate, startTime, endDate, endTime));
         } else {
-            model.addAttribute("meals", mealController.getAll());
+            model.addAttribute("meals", super.getAll());
         }
         return "meals";
     }
 
     @PostMapping()
-    public String saveMeal(HttpServletRequest request) {
-
+    public String saveMeal(HttpServletRequest request) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("UTF-8");
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
         if (StringUtils.hasLength(request.getParameter("id"))) {
-            mealController.update(meal, getId(request));
+            super.update(meal, getId(request));
         } else {
-            mealController.create(meal);
+            super.create(meal);
         }
         return "redirect:/meals";
     }
@@ -65,13 +67,13 @@ public class JspMealController {
 
     @GetMapping("/update")
     public String edit(HttpServletRequest request, Model model) {
-        model.addAttribute("meal", mealController.get(getId(request)));
+        model.addAttribute("meal", super.get(getId(request)));
         return "mealForm";
     }
 
     @GetMapping(params = "action=delete")
     public String deleteMeal(HttpServletRequest request) {
-        mealController.delete(getId(request));
+        super.delete(getId(request));
         return "redirect:/meals";
     }
 
