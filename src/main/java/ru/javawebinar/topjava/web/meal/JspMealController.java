@@ -68,6 +68,7 @@ public class JspMealController extends AbstractMealController {
     @GetMapping("/update")
     public String edit(HttpServletRequest request, Model model) {
         model.addAttribute("meal", super.get(getId(request)));
+        model.addAttribute("action", "create");
         return "mealForm";
     }
 
