@@ -7,7 +7,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
@@ -15,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@Transactional(readOnly = true)
 public class JdbcMealRepository implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
@@ -25,17 +31,25 @@ public class JdbcMealRepository implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
-    public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    private DataSourceTransactionManager transactionManager;
+
+    public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                              DataSourceTransactionManager transactionManager) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.transactionManager = transactionManager;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
+        TransactionDefinition definition =
+                new DefaultTransactionDefinition();
+        TransactionStatus status = transactionManager.getTransaction(definition);
+
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
@@ -54,6 +68,7 @@ public class JdbcMealRepository implements MealRepository {
                 return null;
             }
         }
+        transactionManager.commit(status);
         return meal;
     }
 
