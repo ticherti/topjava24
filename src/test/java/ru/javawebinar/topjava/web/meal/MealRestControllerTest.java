@@ -15,6 +15,7 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
@@ -84,12 +85,13 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetween() throws Exception {
-        String testDate = "2020-01-30";
-        List<MealTo> toList = MealsUtil.getTos(mealService.getBetweenInclusive(LocalDate.of(2020, Month.JANUARY, 30),
-                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), MealsUtil.DEFAULT_CALORIES_PER_DAY);
-        perform(MockMvcRequestBuilders.get(REST_URL + "filter?startDate=" +
-                testDate + "&" + "endDate=" +
-                testDate))
+        final String REQUEST = "filter?startDate=2020-01-30T10:00:00&endDate=2020-01-31T20:00:00";
+        List<MealTo> toList = MealsUtil.getFilteredTos(mealService.getBetweenInclusive(
+                LocalDate.of(2020, Month.JANUARY, 30),
+                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), USER_ID,
+                LocalTime.of(10, 0, 0),
+                LocalTime.of(20, 0,0));
+        perform(MockMvcRequestBuilders.get(REST_URL + REQUEST))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEALTO_MATCHER.contentJson(toList));
