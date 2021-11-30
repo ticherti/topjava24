@@ -103,4 +103,22 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_TO_MATCHER.contentJson(expectedToList));
     }
+    @Test
+    void getBetweenWithoutParams() throws Exception {
+        List<MealTo> expectedToList = MealsUtil.getFilteredTos(mealService.getBetweenInclusive(
+                null,
+                null, USER_ID), UserTestData.user.getCaloriesPerDay(),
+                null,
+                null);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(REST_URL + "filter");
+        requestBuilder.param("startDate", "")
+                .param("startTime", "")
+                .param("endDate", "")
+                .param("endTime", "");
+        perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MEAL_TO_MATCHER.contentJson(expectedToList));
+    }
 }
