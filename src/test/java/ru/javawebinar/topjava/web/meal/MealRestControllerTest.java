@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
@@ -54,7 +56,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(meals, MealsUtil.DEFAULT_CALORIES_PER_DAY)));
+                .andExpect(MEAL_TO_MATCHER.contentJson(MealsUtil.getTos(meals, UserTestData.user.getCaloriesPerDay())));
     }
 
     @Test
@@ -85,15 +87,18 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetween() throws Exception {
-        final String REQUEST = "filter?startDate=2020-01-30T10:00:00&endDate=2020-01-31T20:00:00";
-        List<MealTo> toList = MealsUtil.getFilteredTos(mealService.getBetweenInclusive(
+        List<MealTo> expectedToList = MealsUtil.getFilteredTos(mealService.getBetweenInclusive(
                 LocalDate.of(2020, Month.JANUARY, 30),
-                LocalDate.of(2020, Month.JANUARY, 30), USER_ID), USER_ID,
+                LocalDate.of(2020, Month.JANUARY, 31), USER_ID), UserTestData.user.getCaloriesPerDay(),
                 LocalTime.of(10, 0, 0),
-                LocalTime.of(20, 0,0));
-        perform(MockMvcRequestBuilders.get(REST_URL + REQUEST))
+                LocalTime.of(20, 0, 0));
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(REST_URL + "filter");
+        requestBuilder.param("startDateTime", "2020-01-30T10:00:00")
+                .param("endDateTime", "2020-01-31T20:00:00");
+        perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(toList));
+                .andExpect(MEAL_TO_MATCHER.contentJson(expectedToList));
     }
 }
