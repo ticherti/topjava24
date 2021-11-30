@@ -1,102 +1,152 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/04d1953ffd084bd2a895ddbee2a985c2)](https://www.codacy.com/gh/ticherti/topjava24/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ticherti/topjava24&amp;utm_campaign=Badge_Grade)
 
-Java Enterprise Online Project 
+Java Enterprise Online Project
 ===============================
 Разработка полнофункционального Spring/JPA Enterprise приложения c авторизацией и правами доступа на основе ролей с использованием наиболее популярных инструментов и технологий Java: Maven, Spring MVC, Security, JPA(Hibernate), REST(Jackson), Bootstrap (css,js), datatables, jQuery + plugins, Java 8 Stream and Time API и хранением в базах данных Postgresql и HSQLDB.
 
-![topjava_structure](https://user-images.githubusercontent.com/13649199/27433714-8294e6fe-575e-11e7-9c41-7f6e16c5ebe5.jpg)
+Наиболее востребованные технологии /инструменты / фреймворки Java Enterprise:
+Maven/ Spring/ Security/ JPA(Hibernate)/ REST(Jackson)/ Bootstrap(CSS)/ jQuery + plugins.
 
-    Когда вы слышите что-то, вы забываете это.
-    Когда вы видите что-то, вы запоминаете это.
-    Но только когда вы начинаете делать это,
-    вы начинаете понимать это
+- [Вступительное занятие](https://github.com/JavaOPs/topjava)
+- [Описание и план проекта](https://github.com/JavaOPs/topjava/blob/master/description.md)
+- [Wiki](https://github.com/JavaOPs/topjava/wiki)
+- [Wiki Git](https://github.com/JavaOPs/topjava/wiki/Git)
+- [Wiki IDEA](https://github.com/JavaOPs/topjava/wiki/IDEA)
+- [Демо разрабатываемого приложения](http://topjava.herokuapp.com/)
 
-    Старинная китайская поговорка
+### 30.09: Старт проекта
+- Начало проверки [вступительного задания](https://github.com/JavaOPs/topjava#-Домашнее-задание-hw0)
 
-## <a href="description.md">Описание и план проекта</a>
-### <a href="http://topjava.herokuapp.com/" target=_blank>Демо разрабатываемого приложения</a>
-### [Изменения проекта (Release Notes)](ReleaseNotes.md)
-### <a href="https://github.com/JavaOPs/topjava/wiki">Требования к участникам, Wiki</a>
-### <a href="cv.md">Составление резюме, подготовка к интервью, поиск работы</a>
+####  05.10 Дедлайн на сдачу HW0
+### 07.10: 1-е занятие
+####  07.10 Дедлайн подачи заявки на [дипломную программу](https://javaops.ru/view/register/diploma)
+- Разбор домашнего задания вступительного занятия (вместе с Optional)
+- Обзор используемых в проекте технологий. Интеграция ПО
+- Maven
+- WAR. Веб-контейнер Tomcat. Сервлеты
+- Логирование
+- Уровни и зависимости логгирования. JMX
+- Домашнее задание 1-го занятия (HW1 + Optional)
 
-Вводное занятие (обязательно смотреть все видео)
-===============
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 1. <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFY1ZDNXRCd1NCTG8/view?resourcekey=0-NKNOHbTWXnsZtbe5_8B6Bg">Осваиваем Java Enterprise. Трудоустройство. Ответы на вопросы.</a>
-- <a href="https://goo.gl/XNVOj4">Слайды презентации</a>
-- [Как стать профессиональным Java разработчиком](https://www.youtube.com/watch?v=ft0Nj8Cm9kk)
-- [Популярность Java-технологий в 2019 году](https://topjava.ru/blog/sostoyanie-java-v-2019-godu)
-- [Java Technology Report 2021](https://www.jrebel.com/blog/2021-java-technology-report)
-- [The State of Developer Ecosystem 2020](https://www.jetbrains.com/lp/devecosystem-2020/java/)
-- [JVM Ecosystem Report 2021](https://snyk.io/jvm-ecosystem-report-2021/)
-- [Быть программистом: от детства к зрелости](https://www.youtube.com/watch?v=D5Hej0TyLaU)
-- [Литература](https://javaops.ru/view/books)
+### 14.10: 2-е занятие
+- Разбор домашнего задания HW1 + Optional
+- Библиотека vs Фреймворк. Стандартные библиотеки Apache Commons, Guava
+- Слои приложения. Создание каркаса приложения
+- Обзор Spring Framework. Spring Context
+- Пояснения к HW2. Обработка Autowired
+- Домашнее задание (HW2 + Optional)
 
-#### Spring Pet-Clinic
-- <a href="https://github.com/spring-projects/spring-petclinic">Spring PetClinic Sample Application </a>
-- <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">Presentation</a>
+### 21.10: 3-е занятие
+- Разбор домашнего задания HW2 + Optional
+- Жизненный цикл Spring контекста
+- Тестирование через JUnit
+- Spring Test
+- Базы данных. Обзор NoSQL и Java persistence solution без ORM
+- Настройка Database в IDEA
+- Скрипты инициализации базы. Spring Jdbc Template
+- Тестирование UserService через AssertJ
+- Логирование тестов
+- Домашнее задание (HW3 + Optional)
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2. <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFSUNrdVc0bDZuX2s/view?resourcekey=0-6scb0PBj2A3Oqf6rsU2egQ">Системы управления версиями. Git.</a>
--  **<a href="https://github.com/JavaOPs/topjava/wiki/Git">Wiki по ведению проекта в Git</a>**
--  <a href="http://ru.wikipedia.org/wiki/Система_управления_версиями">Система управления версиями</a>. <a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F%D0%BC%D0%B8#.D0.A0.D0.B0.D1.81.D0.BF.D1.80.D0.B5.D0.B4.D0.B5.D0.BB.D1.91.D0.BD.D0.BD.D1.8B.D0.B5_.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D1.8B_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B2.D0.B5.D1.80.D1.81.D0.B8.D1.8F.D0.BC.D0.B8">VCS/DVSC</a>.
--  Ресурсы:            
-    -  <a href="https://try.github.io/levels/1/challenges/1">Интерактивная Git обучалка</a>
-    -  <a href="http://learngitbranching.js.org/">Еще одна интерактивная обучалка, по-русски</a>    
-    -  <a href="https://git-scm.com/book/ru/v2">Книга Git</a>
-    -  <a href="https://illustrated-git.readthedocs.org/en/latest/#working-with-remote-repositories">Working with remote repositories</a>
-    -  <a href="https://www.youtube.com/playlist?list=PLIU76b8Cjem5B3sufBJ_KFTpKkMEvaTQR">Видео по обучению Git</a>
-    -  <a href="https://blog.interlinked.org/tutorials/git.html">Git Overview</a>
-    -  [Основы Git за 20 минут](https://www.youtube.com/watch?v=TMeZGvtQnT8)
-    -  [Git - для новичков](https://www.youtube.com/watch?list=PLY4rE9dstrJyTdVJpv7FibSaXB4BHPInb&v=PEKN8NtBDQ0)
-    - [Руководство по написанию комментариев в коммитах](https://techrocks.ru/2019/12/02/writing-good-commit-messages)
+### 28.10: 4-е занятие
+- Разбор домашнего задания HW3 + Optional
+- Методы улучшения качества кода
+- Spring: инициализация и популирование DB
+- Подмена контекста при тестировании
+- ORM. Hibernate. JPA
+- Поддержка HSQLDB
+- Домашнее задание (HW4 + Optional)
+#### Начало выполнения [выпускного проекта](https://github.com/JavaOPs/topjava/blob/master/graduation.md)
 
-##  ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3. <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFZDdaaU5fZEo4X3c/view?resourcekey=0-DvpzWIlMHZ7KX_v1SMuiAw">Работа с проектом (выполнять инструкции)</a>
-- **ВНИМАНИЕ: выбирайте для проекта простой пусть без пробелов и русских букв, например (Windows) `c:\projects\topjava\`. Иначе впоследствии будут проблемы**
-- **Плагин уже Git Intergation не требуется и вкладку `Version control` в IDEA переименовали в `Git`**
+### 04.11: 5-е занятие
+- Обзор JDK 9/17. Миграция Topjava с 1.8 на 17
+- Разбор вопросов
+- Разбор домашнего задания HW4 + Optional
+- Транзакции
+- Профили Maven и Spring
+- Пул коннектов
+- Spring Data JPA
+- Spring кэш
+- Домашнее задание (HW5 + Optional)
 
-Для переключения режима отображения изменений из вкладки Commit в Git: Local Changes нужно переключить `Settings/Preferences | Version Control | Commit | Use non-modal commit interface` или в контекстном меню вкладки `Commit`:
+### 11.11: 6-е занятие
+- Разбор домашнего задания HW5 + Optional
+- Кэш Hibernate
+- Spring Web
+- JSP, JSTL, internationalization
+- Динамическое изменение профиля при запуске
+- Конфигурирование Tomcat через maven plugin. Jndi-lookup
+- Spring Web MVC
+- Spring Internationalization
+- Домашнее задание (HW6 + Optional)
 
-![image](https://user-images.githubusercontent.com/13649199/105491518-72d8f300-5cc7-11eb-8b79-c46382562deb.png)  ![image](https://user-images.githubusercontent.com/13649199/105488663-05c35e80-5cc3-11eb-962e-30f403d623e8.png)
+#### Большое ДЗ + выпускной проект + начинаем [курс BootJava](https://javaops.ru/view/bootjava) + подтягиваем "хвосты".
 
-### Патч [prepare_to_HW0.patch](https://drive.google.com/file/d/1LNPpu9OkuCpfpD8ZJHO-o0vwu49p2i5M) (скачать и положить в каталог вашего проекта)
+### 25.11: 7-е занятие
+- Разбор домашнего задания HW6 + Optional
+- Автогенерация DDL по модели
+- Тестирование Spring MVC
+- Миграция на JUnit 5
+- Принципы REST. REST контроллеры
+- Тестирование REST контроллеров. Jackson
+- jackson-datatype-hibernate. Тестирование через матчеры
+- Тестирование через SoapUi. UTF-8
+- Домашнее задание (HW7 + Optional)
 
-> Проект постоянно улучшается, поэтому видео иногда отличается от кода проекта. Изменения указываю после видео: 
-> - переименовал класс `UserMealWithExceed` и его поле `exceed` в `UserMealWithExcess.excess`
-> - в `UserMeals/UserMealWithExcess` поля изменились на `private`
-> - обновил данные `UserMealsUtil.meals` и переименовал некоторые пременные, поля и методы
-> - добавил `UserMealWithExcess.toString()` и метод для выполнения _Optional домашнего задания_
-> - метод фильтрации в `TimeUtil` переименовали в `isBetweenHalfOpen` (также изменилась логика сравнения - `startTime` включается в интервал) 
+### 02.12: 8-е занятие
+- Разбор домашнего задания HW7 + Optional
+- WebJars. jQuery и JavaScript frameworks
+- Bootstrap
+- AJAX. Datatables. jQuery
+- jQuery notifications plugin
+- Добавление Spring Security
+- Домашнее задание (HW8 + Optional)
 
-##  Инструкция по шагам (из видео):</h3>
--  <a href="http://javaops.ru/view/soft">Установить ПО (git, JDK8, IntelliJ IDEA, Maven)</a>
--  Создать аккаунт на <a href="https://github.com">GitHub</a>
--  Сделать Fork **ЭТОГО** проекта (https://github.com/JavaOPs/topjava) </a>
--  Сделать локальный репозиторий проекта:
-            <pre>git clone https://github.com/[Ваш аккаунт]/topjava.git</pre>
--  Открыть и настроить проект в IDEA
-   - <a href="http://stackoverflow.com/questions/29695918/intellij-idea-console-issue#33035499">Выставить кодировку UTF-8 в консоли</a>
-   - <a href="https://github.com/JavaOPs/topjava/wiki/IDEA#%D0%9F%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BA%D0%BE%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D1%83-utf-8">Поставить кодировку UTF-8</a>
-   - Опционально: <a href="https://github.com/JavaOPs/topjava/wiki/IDEA#%D0%9F%D0%BE%D0%BC%D0%B5%D0%BD%D1%8F%D1%82%D1%8C-%D1%84%D0%BE%D0%BD%D1%82-%D0%BF%D0%BE-%D1%83%D0%BC%D0%BE%D0%BB%D1%87%D0%B0%D0%BD%D0%B8%D1%8E-dejavu">Поменять фонт по умолчанию (DejaVu)</a> или на **новый [JetBrains Mono](https://habr.com/ru/company/jugru/news/t/484134/)**
--  По ходу видео сделать Apply Patch... скаченного патча Prepare_ to_ HW0.patch
--  Закоммитить и запушить изменения (commit + push)
--  Сделать ветку домашнего задания
--  Выполнить задание и залить на GitHub (commit + push)
--  Переключиться в основную ветку проекта master.
+### 09.12: 9-е занятие
+- Разбор домашнего задания HW8 + Optional
+- Spring Binding
+- Spring Validation
+- Перевод DataTables на Ajax
+- Форма login / logout
+- Реализация собственного провайдера авторицазии
+- Принцип работы Spring Security. Проксирование
+- Spring Security Test
+- Cookie. Session
+- Домашнее задание (HW9 + Optional)
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 4. [Тех.задание: библия или допускаются изменения. Полуоткрытый интервал.](https://drive.google.com/file/d/1BpTzjNFjS0TSekCyt_xvt6YoLvuw5KTZ/view?usp=sharing)
-- [Типы промежутков](https://ru.wikipedia.org/wiki/Промежуток_(математика))
+### 16.12: 10-е занятие
+- Разбор домашнего задания HW10 + Optional
+- Кастомизация JSON (@JsonView) и валидации (groups)
+- Рефакторинг: jQuery конверторы и группы валидации по умолчанию
+- Spring Security Taglib. Method Security Expressions
+- Интерсепторы. Редактирование профиля. JSP tag files
+- Форма регистрации
+- Обработка исключений в Spring
+- Encoding password
+- Миграция на Spring 5
+- Защита от межсайтовой подделки запросов (CSRF)
+- Домашнее задание (HW10)
 
-## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Домашнее задание HW0
+### 23.12: 11-е занятие
+- Разбор домашнего задания HW10 + Optional
+- Локализация datatables, ошибок валидации
+- Защита от XSS (Cross Site Scripting)
+- Обработка ошибок 404 (NotFound)
+- Доступ к AuthorizedUser
+- Ограничение модификации пользователей
+- Деплой [приложения в Heroku](http://topjava.herokuapp.com)
+- Собеседование. Разработка ПО
+- Возможные доработки приложения
+- Домашнее задание по проекту: составление резюме
 
-Реализовать метод `UserMealsUtil.filteredByCycles` через циклы (`forEach`):
--  должны возвращаться только записи между `startTime` и `endTime`
--  поле `UserMealWithExcess.excess` должно показывать, 
-                                     превышает ли сумма калорий за весь день значение `caloriesPerDay`
-        
-Т.е `UserMealWithExcess` - это запись одной еды, но поле `excess` будет одинаково для всех записей за этот день.
-    
-> - Проверьте результат выполнения ДЗ (можно проверить логику в http://topjava.herokuapp.com , список еды)
-> - Оцените Time complexity алгоритма. Если она больше O(N), например O(N*N) или N*log(N), сделайте O(N).  
-> **Внимание: внимательно прочитайте про O(N). O - это любой коэффициент, 2*N это тоже O(N).**
+### 27.12: Миграция на Spring-Boot
+- Основы Spring Boot. Spring Boot maven plugin
+- Lombok, база H2, ApplicationRunner
+- Spring Data REST + HATEOAS
+- Миграция приложения подсчета калорий на Spring Boot
+
+### 16.01.22: Дедлайн на сдачу [выпускного проекта](https://github.com/JavaOPs/topjava/blob/master/graduation.md)
+### 26.01.22: Получение дипломов для участников [Дипломной программы](https://javaops.ru/view/register/diploma)
 
 -  <a href="http://www.mscharhag.com/2014/02/java-8-datetime-api.html">Java 8 Date and Time API</a>
 -  <a href="http://web.archive.org/web/20201128101944/https://tproger.ru/translations/algorithms-and-data-structures/">Алгоритмы и структуры данных для начинающих: сложность алгоритмов</a>

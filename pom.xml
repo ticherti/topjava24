@@ -23,8 +23,8 @@
         <tomcat.version>9.0.54</tomcat.version>
 
         <!-- Logging -->
-        <logback.version>1.2.3</logback.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <logback.version>1.2.6</logback.version>
+        <slf4j.version>1.7.32</slf4j.version>
 
         <!--DB-->
         <postgresql.version>42.3.0</postgresql.version>
